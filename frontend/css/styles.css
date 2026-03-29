@@ -1,0 +1,191 @@
+/* ===== Reset & Variables ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --primary:    #4f46e5;
+  --primary-dk: #3730a3;
+  --danger:     #ef4444;
+  --success:    #22c55e;
+  --warn:       #f59e0b;
+  --bg:         #f1f5f9;
+  --card:       #ffffff;
+  --text:       #1e293b;
+  --muted:      #64748b;
+  --border:     #e2e8f0;
+  --radius:     0.75rem;
+  --shadow:     0 4px 20px rgba(0,0,0,.08);
+}
+
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+/* ===== Navbar ===== */
+.navbar {
+  background: var(--primary);
+  color: white;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+  position: sticky; top: 0; z-index: 100;
+}
+.nav-brand { font-size: 1.3rem; font-weight: 700; }
+.nav-links { display: flex; align-items: center; gap: 1rem; }
+#studentName { font-weight: 600; }
+
+/* ===== Buttons ===== */
+.btn {
+  padding: .5rem 1.2rem;
+  border-radius: .5rem;
+  border: none;
+  cursor: pointer;
+  font-size: .9rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all .2s;
+}
+.btn-primary  { background: var(--primary); color: white; }
+.btn-primary:hover  { background: var(--primary-dk); transform: translateY(-1px); }
+.btn-outline  { background: transparent; color: white; border: 2px solid white; }
+.btn-outline:hover  { background: white; color: var(--primary); }
+.btn-danger   { background: var(--danger); color: white; }
+.btn-danger:hover   { background: #dc2626; }
+.btn-success  { background: var(--success); color: white; }
+.btn-success:hover  { background: #16a34a; }
+.btn-warn     { background: var(--warn); color: white; }
+.btn-full     { width: 100%; padding: .8rem; font-size: 1rem; }
+.btn:disabled { opacity: .6; cursor: not-allowed; }
+
+/* ===== Auth Page ===== */
+.auth-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+}
+.auth-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 2.5rem;
+  width: 100%;
+  max-width: 440px;
+  box-shadow: 0 20px 60px rgba(0,0,0,.2);
+}
+.auth-header { text-align: center; margin-bottom: 1.5rem; }
+.auth-header h1 { font-size: 1.6rem; color: var(--primary); }
+.auth-header p  { color: var(--muted); margin-top: .4rem; }
+
+.tab-switcher { display: flex; background: var(--bg); border-radius: .5rem; padding: 4px; margin-bottom: 1.5rem; }
+.tab-btn { flex: 1; padding: .5rem; background: transparent; border: none; border-radius: .4rem; cursor: pointer; font-weight: 600; color: var(--muted); transition: all .2s; }
+.tab-btn.active { background: var(--primary); color: white; }
+
+.form-group { margin-bottom: 1rem; }
+.form-group label { display: block; margin-bottom: .4rem; font-weight: 600; font-size: .9rem; }
+.form-group input {
+  width: 100%;
+  padding: .7rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: .5rem;
+  font-size: .95rem;
+  transition: border .2s;
+}
+.form-group input:focus { outline: none; border-color: var(--primary); }
+.form-group input.invalid { border-color: var(--danger); }
+.error-msg   { font-size: .8rem; color: var(--danger); display: block; margin-top: .25rem; }
+.form-error  { color: var(--danger); font-size: .88rem; margin-top: .75rem; text-align: center; }
+.form-success{ color: var(--success); font-size: .88rem; margin-top: .75rem; text-align: center; }
+.hidden { display: none !important; }
+
+/* ===== Container ===== */
+.container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+.page-header, .dashboard-header { margin-bottom: 2rem; }
+.page-header h2, .dashboard-header h2 { font-size: 1.8rem; color: var(--text); }
+.page-header p,  .dashboard-header p  { color: var(--muted); margin-top: .3rem; }
+
+/* ===== Stats Grid ===== */
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 1rem; margin-bottom: 2rem; }
+.stat-card { background: var(--card); border-radius: var(--radius); padding: 1.25rem; text-align: center; box-shadow: var(--shadow); }
+.stat-card .stat-number { font-size: 2rem; font-weight: 700; color: var(--primary); }
+.stat-card .stat-label  { font-size: .85rem; color: var(--muted); margin-top: .25rem; }
+
+/* ===== Filter Bar ===== */
+.filter-bar { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.filter-bar input, .filter-bar select {
+  padding: .65rem 1rem;
+  border: 2px solid var(--border);
+  border-radius: .5rem;
+  font-size: .95rem;
+  background: var(--card);
+}
+.filter-bar input  { flex: 1; min-width: 200px; }
+.filter-bar input:focus, .filter-bar select:focus { outline: none; border-color: var(--primary); }
+
+/* ===== Course Grid ===== */
+.courses-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(310px, 1fr)); gap: 1.5rem; }
+.course-card {
+  background: var(--card);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  transition: transform .2s, box-shadow .2s;
+  border-top: 4px solid var(--primary);
+}
+.course-card:hover { transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,.12); }
+.course-card-header { display: flex; justify-content: space-between; align-items: flex-start; }
+.course-code { background: var(--primary); color: white; padding: .2rem .6rem; border-radius: .3rem; font-size: .8rem; font-weight: 700; }
+.course-credits { color: var(--muted); font-size: .85rem; }
+.course-title { font-size: 1.1rem; font-weight: 700; color: var(--text); }
+.course-info { font-size: .88rem; color: var(--muted); display: flex; flex-direction: column; gap: .3rem; }
+.course-info span::before { margin-right: .4rem; }
+.capacity-bar { background: var(--bg); border-radius: 99px; height: 6px; overflow: hidden; }
+.capacity-fill { height: 100%; border-radius: 99px; background: var(--success); transition: width .4s; }
+.capacity-fill.warn { background: var(--warn); }
+.capacity-fill.full { background: var(--danger); }
+.capacity-text { font-size: .8rem; color: var(--muted); }
+
+/* ===== Enrollment Table ===== */
+.enrollments-table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); }
+thead { background: var(--primary); color: white; }
+th, td { padding: .9rem 1.2rem; text-align: left; font-size: .9rem; }
+tbody tr { border-bottom: 1px solid var(--border); }
+tbody tr:hover { background: var(--bg); }
+tbody tr:last-child { border-bottom: none; }
+
+/* ===== Badge ===== */
+.badge { background: rgba(255,255,255,.2); color: white; padding: .2rem .6rem; border-radius: 99px; font-size: .8rem; font-weight: 600; }
+.status-badge { padding: .25rem .7rem; border-radius: 99px; font-size: .8rem; font-weight: 600; }
+.status-enrolled { background: #dcfce7; color: #166534; }
+.status-full      { background: #fee2e2; color: #991b1b; }
+
+/* ===== Empty / Loading States ===== */
+.loading-text { color: var(--muted); text-align: center; padding: 3rem; font-size: 1rem; }
+.empty-state { text-align: center; padding: 3rem; color: var(--muted); }
+.empty-state h3 { font-size: 1.2rem; margin-bottom: .5rem; }
+
+/* ===== Toast ===== */
+#toast {
+  position: fixed; bottom: 2rem; right: 2rem;
+  background: #1e293b; color: white;
+  padding: 1rem 1.5rem; border-radius: .75rem;
+  font-size: .9rem; font-weight: 500;
+  box-shadow: 0 8px 25px rgba(0,0,0,.2);
+  transform: translateY(100px); opacity: 0;
+  transition: all .3s; z-index: 9999;
+}
+#toast.show { transform: translateY(0); opacity: 1; }
+#toast.success { border-left: 4px solid var(--success); }
+#toast.error   { border-left: 4px solid var(--danger); }
+
+/* ===== Responsive ===== */
+@media (max-width: 640px) {
+  .navbar { flex-direction: column; gap: .75rem; text-align: center; }
+  .nav-links { flex-wrap: wrap; justify-content: center; }
+  .container { padding: 1rem; }
+  .auth-card { padding: 1.5rem; }
+}

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Available Courses – Course Portal</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">🎓 Course Portal</div>
+    <div class="nav-links">
+      <a href="dashboard.html" class="btn btn-outline">My Dashboard</a>
+      <button onclick="logout()" class="btn btn-danger">Logout</button>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="page-header">
+      <h2>Available Courses</h2>
+      <p>Browse and enroll in courses for this semester.</p>
+    </section>
+
+    <!-- Search & Filter Bar -->
+    <div class="filter-bar">
+      <input
+        type="text"
+        id="searchInput"
+        placeholder="Search by title, code, or instructor..."
+        oninput="filterCourses()"
+      />
+      <select id="deptFilter" onchange="filterCourses()">
+        <option value="">All Departments</option>
+        <option value="Computer Science">Computer Science</option>
+        <option value="Mathematics">Mathematics</option>
+        <option value="Physics">Physics</option>
+        <option value="Business">Business</option>
+        <option value="Engineering">Engineering</option>
+      </select>
+    </div>
+
+    <div id="coursesContainer">
+      <p class="loading-text">Loading courses...</p>
+    </div>
+  </main>
+
+  <script src="js/courses.js"></script>
+</body>
+</html>

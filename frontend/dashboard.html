@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard – Course Portal</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <div class="nav-brand">🎓 Course Portal</div>
+    <div class="nav-links">
+      <span id="studentName">Loading...</span>
+      <span id="studentId" class="badge"></span>
+      <a href="courses.html" class="btn btn-outline">Browse Courses</a>
+      <button onclick="logout()" class="btn btn-danger">Logout</button>
+    </div>
+  </nav>
+
+  <main class="container">
+    <section class="dashboard-header">
+      <h2>My Enrolled Courses</h2>
+      <p>Manage your current semester registrations below.</p>
+    </section>
+
+    <div id="enrollmentStats" class="stats-grid"></div>
+
+    <div id="enrollmentsContainer">
+      <p class="loading-text">Loading your courses...</p>
+    </div>
+  </main>
+
+  <script src="js/enrollments.js"></script>
+</body>
+</html>
