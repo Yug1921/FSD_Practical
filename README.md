@@ -1,4 +1,4 @@
-<img width="1918" height="1078" alt="Screenshot 2026-03-29 231229" src="https://github.com/user-attachments/assets/35c40a06-925f-43ba-9e86-5164b27186e9" /># 🎓 Student Course Registration System
+# 🎓 Student Course Registration System
 
 A full-stack web application that allows students to register, login, browse available courses, and enroll in courses for a semester.
 
