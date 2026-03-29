@@ -38,6 +38,7 @@ This project demonstrates a complete **MERN-style architecture** using **Node.js
 ---
 
 ## 📂 Project Structure
+
 Student_Registration
 │
 ├── backend
