@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ path: "./backend/.env" });
 const express = require("express");
 const cors = require("cors");
 const path = require("path");
@@ -9,6 +9,8 @@ connectDB();
 
 app.use(cors());
 app.use(express.json());
+
+console.log("JWT_SECRET =", process.env.JWT_SECRET);
 
 // Serve static frontend files
 app.use(express.static(path.join(__dirname, "../frontend")));
