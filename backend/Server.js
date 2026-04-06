@@ -10,15 +10,18 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-console.log("JWT_SECRET =", process.env.JWT_SECRET);
-
 // Serve static frontend files
 app.use(express.static(path.join(__dirname, "../frontend")));
+
+// Serve uploaded images
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // API Routes
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/courses", require("./routes/courses"));
 app.use("/api/enrollments", require("./routes/enrollments"));
+app.use("/api/payments", require("./routes/payments"));
+app.use("/api/upload", require("./routes/upload"));
 
 // Catch-all: serve frontend
 app.get("*", (req, res) => {
