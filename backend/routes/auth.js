@@ -15,7 +15,7 @@ router.post("/register", async (req, res) => {
   if (!name || !name.trim()) {
     return res.status(400).json({ message: "Name is required" });
   }
-  if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
     return res.status(400).json({ message: "Valid email is required" });
   }
   if (!password || password.length < 6) {

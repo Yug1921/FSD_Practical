@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
+const crypto = require("crypto");
 const Payment = require("../models/Payment");
 const { protect } = require("../middleware/auth");
 
-// Generate a mock transaction ID
+// Generate a unique transaction ID using crypto
 const generateTransactionId = () =>
-  "TXN" + Date.now() + Math.floor(Math.random() * 1000);
+  "TXN" + Date.now() + crypto.randomBytes(4).toString("hex").toUpperCase();
 
 // POST /api/payments/process — mock payment processing
 router.post("/process", protect, async (req, res) => {

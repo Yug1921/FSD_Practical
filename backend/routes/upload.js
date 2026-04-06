@@ -3,6 +3,7 @@ const router = express.Router();
 const multer = require("multer");
 const path = require("path");
 const fs = require("fs");
+const crypto = require("crypto");
 const { protect } = require("../middleware/auth");
 
 // Ensure uploads directory exists
@@ -17,7 +18,7 @@ const storage = multer.diskStorage({
     cb(null, uploadsDir);
   },
   filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const uniqueSuffix = Date.now() + "-" + crypto.randomBytes(8).toString("hex");
     const ext = path.extname(file.originalname).toLowerCase();
     cb(null, "img-" + uniqueSuffix + ext);
   },
