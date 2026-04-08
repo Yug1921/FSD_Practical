@@ -1,11 +1,5 @@
-const API = "http://localhost:5000/api";
-const token = localStorage.getItem("token");
+const token = AppSession.getToken();
 if (!token) window.location.href = "index.html";
-
-const headers = {
-  "Content-Type": "application/json",
-  Authorization: `Bearer ${token}`,
-};
 
 // ── Toast ─────────────────────────────────────────────────
 function toast(msg, type = "success") {
@@ -23,21 +17,26 @@ function toast(msg, type = "success") {
 // ── Load Student Info ─────────────────────────────────────
 async function loadProfile() {
   try {
-    const res  = await fetch(`${API}/auth/profile`, { headers });
-    const data = await res.json();
+    const data = await AppSession.authenticatedRequest("/auth/profile", {
+      method: "GET",
+    });
     document.getElementById("studentName").textContent = data.name;
     document.getElementById("studentId").textContent   = data.studentId;
-  } catch {}
+  } catch (err) {
+    if (err.status === 401) return;
+  }
 }
 
 // ── Load Enrollments ──────────────────────────────────────
 async function loadEnrollments() {
   try {
-    const res   = await fetch(`${API}/enrollments`, { headers });
-    const data  = await res.json();
+    const data  = await AppSession.authenticatedRequest("/enrollments", {
+      method: "GET",
+    });
     renderStats(data);
     renderTable(data);
-  } catch {
+  } catch (err) {
+    if (err.status === 401) return;
     document.getElementById("enrollmentsContainer").innerHTML =
       `<p class="empty-state"><h3>Failed to load enrollments.</h3></p>`;
   }
@@ -122,18 +121,15 @@ async function dropCourse(enrollmentId, courseTitle, btn) {
   btn.textContent = "Dropping...";
 
   try {
-    const res = await fetch(`${API}/enrollments/${enrollmentId}`, {
+    await AppSession.authenticatedRequest(`/enrollments/${enrollmentId}`, {
       method: "DELETE",
-      headers,
     });
-    const data = await res.json();
-
-    if (!res.ok) throw new Error(data.message);
 
     document.getElementById(`row-${enrollmentId}`)?.remove();
     toast(`Dropped "${courseTitle}" successfully.`, "success");
     loadEnrollments(); // refresh stats
   } catch (err) {
+    if (err.status === 401) return;
     toast(err.message, "error");
     btn.disabled = false;
     btn.textContent = "Drop";
@@ -141,8 +137,7 @@ async function dropCourse(enrollmentId, courseTitle, btn) {
 }
 
 function logout() {
-  localStorage.clear();
-  window.location.href = "index.html";
+  AppSession.logout();
 }
 
 loadProfile();

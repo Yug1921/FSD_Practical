@@ -1,15 +1,9 @@
-const API = "http://localhost:5000/api";
 let allCourses    = [];
 let enrolledIds   = new Set();
 
 // ── Auth Guard ────────────────────────────────────────────
-const token = localStorage.getItem("token");
+const token = AppSession.getToken();
 if (!token) window.location.href = "index.html";
-
-const headers = {
-  "Content-Type": "application/json",
-  Authorization: `Bearer ${token}`,
-};
 
 // ── Toast Notification ────────────────────────────────────
 function toast(msg, type = "success") {
@@ -26,8 +20,9 @@ function toast(msg, type = "success") {
 
 // ── Load Enrolled IDs ─────────────────────────────────────
 async function loadEnrolledIds() {
-  const res  = await fetch(`${API}/enrollments`, { headers });
-  const data = await res.json();
+  const data = await AppSession.authenticatedRequest("/enrollments", {
+    method: "GET",
+  });
   enrolledIds = new Set(data.map((e) => e.course._id));
 }
 
@@ -35,10 +30,12 @@ async function loadEnrolledIds() {
 async function loadCourses() {
   try {
     await loadEnrolledIds();
-    const res  = await fetch(`${API}/courses`, { headers });
-    allCourses  = await res.json();
+    allCourses  = await AppSession.authenticatedRequest("/courses", {
+      method: "GET",
+    });
     renderCourses(allCourses);
-  } catch {
+  } catch (err) {
+    if (err.status === 401) return;
     document.getElementById("coursesContainer").innerHTML =
       `<p class="empty-state"><h3>Failed to load courses.</h3>Check your connection.</p>`;
   }
@@ -98,14 +95,11 @@ async function enroll(courseId, btn) {
   btn.textContent = "Enrolling...";
 
   try {
-    const res  = await fetch(`${API}/enrollments`, {
+    await AppSession.authenticatedRequest("/enrollments", {
       method: "POST",
-      headers,
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ courseId }),
     });
-    const data = await res.json();
-
-    if (!res.ok) throw new Error(data.message);
 
     enrolledIds.add(courseId);
     toast("Successfully enrolled! ✓", "success");
@@ -114,6 +108,7 @@ async function enroll(courseId, btn) {
     btn.style.cssText = "color:var(--success);border-color:var(--success)";
     btn.textContent = "✓ Enrolled";
   } catch (err) {
+    if (err.status === 401) return;
     toast(err.message, "error");
     btn.disabled = false;
     btn.textContent = "Enroll Now";
@@ -139,8 +134,7 @@ function filterCourses() {
 }
 
 function logout() {
-  localStorage.clear();
-  window.location.href = "index.html";
+  AppSession.logout();
 }
 
 loadCourses();

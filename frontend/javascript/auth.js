@@ -1,11 +1,11 @@
-const API = "http://localhost:5000/api";
-
 // ── Tab Switcher ──────────────────────────────────────────
-function switchTab(tab) {
+function switchTab(tab, button) {
   document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
   document.querySelectorAll(".auth-form").forEach((f) => f.classList.add("hidden"));
   document.querySelector(`#${tab}Form`).classList.remove("hidden");
-  event.target.classList.add("active");
+  if (button) {
+    button.classList.add("active");
+  }
 }
 
 // ── Validation Helpers ────────────────────────────────────
@@ -25,7 +25,10 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
   const email    = document.getElementById("loginEmail").value.trim();
   const password = document.getElementById("loginPassword").value;
+  const btn = document.getElementById("loginBtnText");
   let valid = true;
+
+  document.getElementById("loginError").textContent = "";
 
   if (!validateEmail(email)) {
     setError("loginEmail", "loginEmailError", "Enter a valid email address.");
@@ -39,25 +42,24 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
   if (!valid) return;
 
-  const btn = document.getElementById("loginBtnText");
+  const submitButton = btn.closest("button");
+  submitButton.disabled = true;
   btn.textContent = "Logging in...";
 
   try {
-    const res  = await fetch(`${API}/auth/login`, {
+    const data = await AppSession.request("/auth/login", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
     });
-    const data = await res.json();
 
-    if (!res.ok) throw new Error(data.message);
-
-    localStorage.setItem("token",   data.token);
-    localStorage.setItem("student", JSON.stringify(data));
+    AppSession.setSession(data);
     window.location.href = "dashboard.html";
   } catch (err) {
-    document.getElementById("loginError").textContent = err.message;
+    document.getElementById("loginError").textContent = err.message || "Login failed.";
+  } finally {
     btn.textContent = "Login";
+    submitButton.disabled = false;
   }
 });
 
@@ -68,7 +70,11 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
   const email    = document.getElementById("regEmail").value.trim();
   const password = document.getElementById("regPassword").value;
   const confirm  = document.getElementById("regConfirm").value;
+  const btn = document.getElementById("registerBtnText");
   let valid = true;
+
+  document.getElementById("registerError").textContent = "";
+  document.getElementById("registerSuccess").textContent = "";
 
   if (name.length < 2) {
     setError("regName", "regNameError", "Name must be at least 2 characters.");
@@ -92,34 +98,32 @@ document.getElementById("registerForm").addEventListener("submit", async (e) => 
 
   if (!valid) return;
 
-  const btn = document.getElementById("registerBtnText");
+  const submitButton = btn.closest("button");
+  submitButton.disabled = true;
   btn.textContent = "Creating account...";
 
   try {
-    const res  = await fetch(`${API}/auth/register`, {
+    await AppSession.request("/auth/register", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, email, password }),
     });
-    const data = await res.json();
-
-    if (!res.ok) throw new Error(data.message);
 
     document.getElementById("registerSuccess").textContent =
       "Account created! Redirecting to login...";
-    setTimeout(() => switchTab("login"), 1500);
+    e.target.reset();
+    setTimeout(() => switchTab("login", document.querySelectorAll(".tab-btn")[0]), 1500);
   } catch (err) {
-    document.getElementById("registerError").textContent = err.message;
+    document.getElementById("registerError").textContent = err.message || "Registration failed.";
+  } finally {
     btn.textContent = "Create Account";
+    submitButton.disabled = false;
   }
 });
 
-// Redirect if already logged in
-if (localStorage.getItem("token")) {
-  window.location.href = "dashboard.html";
-}
-
-function logout() {
-  localStorage.clear();
-  window.location.href = "index.html";
-}
+// Redirect only if the stored session is still valid
+(async () => {
+  if (AppSession.getToken() && (await AppSession.verifySession())) {
+    window.location.href = "dashboard.html";
+  }
+})();

@@ -16,8 +16,8 @@
 
       <!-- Tab Switcher -->
       <div class="tab-switcher">
-        <button class="tab-btn active" onclick="switchTab('login')">Login</button>
-        <button class="tab-btn" onclick="switchTab('register')">Register</button>
+        <button class="tab-btn active" onclick="switchTab('login', this)">Login</button>
+        <button class="tab-btn" onclick="switchTab('register', this)">Register</button>
       </div>
 
       <!-- Login Form -->
@@ -69,6 +69,7 @@
     </div>
   </div>
 
+  <script src="javascript/session.js"></script>
   <script src="javascript/auth.js"></script>
 </body>
 </html>

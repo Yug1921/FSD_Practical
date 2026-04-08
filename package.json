@@ -2,10 +2,10 @@
   "name": "student-course-registration",
   "version": "1.0.0",
   "description": "Student Course Registration Web Application",
-  "main": "backend/server.js",
+  "main": "backend/Server.js",
   "scripts": {
-    "start": "node backend/server.js",
-    "dev": "nodemon backend/server.js"
+    "start": "node backend/Server.js",
+    "dev": "nodemon backend/Server.js"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

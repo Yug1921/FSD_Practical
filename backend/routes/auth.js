@@ -3,18 +3,22 @@ const router = express.Router();
 const jwt = require("jsonwebtoken");
 const Student = require("../models/Student");
 const { protect } = require("../middleware/auth");
+const asyncHandler = require("../middleware/asyncHandler");
 
 const generateToken = (id) =>
   jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
 // POST /api/auth/register
-router.post("/register", async (req, res) => {
+router.post(
+  "/register",
+  asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
-  try {
     const exists = await Student.findOne({ email });
     if (exists) {
-      return res.status(400).json({ message: "Email already registered" });
+      res.status(400);
+      throw new Error("Email already registered");
     }
+
     const student = await Student.create({ name, email, password });
     res.status(201).json({
       _id: student._id,
@@ -23,15 +27,15 @@ router.post("/register", async (req, res) => {
       studentId: student.studentId,
       token: generateToken(student._id),
     });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
   }
-});
+  )
+);
 
 // POST /api/auth/login
-router.post("/login", async (req, res) => {
+router.post(
+  "/login",
+  asyncHandler(async (req, res) => {
   const { email, password } = req.body;
-  try {
     const student = await Student.findOne({ email });
     if (student && (await student.matchPassword(password))) {
       res.json({
@@ -41,17 +45,18 @@ router.post("/login", async (req, res) => {
         studentId: student.studentId,
         token: generateToken(student._id),
       });
-    } else {
-      res.status(401).json({ message: "Invalid email or password" });
+      return;
     }
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+
+    res.status(401);
+    throw new Error("Invalid email or password");
   }
-});
+  )
+);
 
 // GET /api/auth/profile
-router.get("/profile", protect, async (req, res) => {
+router.get("/profile", protect, asyncHandler(async (req, res) => {
   res.json(req.student);
-});
+}));
 
 module.exports = router;
